@@ -15,15 +15,12 @@ ycors_list = data["y"].values.tolist()
 
 
 nb_of_states = len(list_of_states)
-states_not_guessed =[]
 guessed_states = []
 
 while nb_of_states != 0:
     state_named = screen.textinput(title="Guess the state. Type 'Exit' to exit", prompt="Name a state: ")
     if state_named == "Exit":
-        for state in list_of_states:
-             if state not in guessed_states:
-                states_not_guessed.append(state)
+        states_not_guessed =[state for state in list_of_states if state not in guessed_states]
         new_data = pandas.DataFrame(states_not_guessed)
         new_data.to_csv("states_not_guessed.csv")
         break
