@@ -1,0 +1,50 @@
+import requests
+
+lattitude_input = float(input("Lattitude: "))
+longitude_input = float(input("Longitude: "))
+date = str(input("Date [YYYY-MM-DD]: "))
+
+parameters = {
+    "lat": lattitude_input,
+    "lng":longitude_input,
+    "date": date
+}
+
+response = requests.get("https://api.sunrise-sunset.org/json", params=parameters)
+response.raise_for_status()
+data = response.json()
+sunrise = data["results"]["sunrise"]
+sunset = data["results"]["sunset"]
+day_length = data["results"]["day_length"]
+
+solar_noon = data["results"]["solar_noon"]
+civil_twilight_begin = data["results"]["civil_twilight_begin"]
+civil_twilight_end = data["results"]["civil_twilight_end"]
+nautical_twilight_begin = data["results"]["nautical_twilight_begin"]
+nautical_twilight_end = data["results"]["nautical_twilight_end"]
+astronomical_twilight_begin = data["results"]["astronomical_twilight_begin"]
+astronomical_twilight_end = data["results"]["astronomical_twilight_end"]
+
+print(" ")
+print("Today's sunrise and sunset at your locations are:")
+print(f"Sunrise at {sunrise},")
+print(f"Sunset at {sunset}.")
+print(f"Day length: {day_length}")
+print(" ")
+
+if_more = input("Do you want more detailed info? Type yes or no")
+
+if if_more == "yes":
+    print(" ")
+    print(f"Solar noon: {solar_noon}")
+    print(f"Civil twilight begins at: {civil_twilight_begin}")
+    print(f"Civil twilight ends at: {civil_twilight_end}")
+    print(f"Nautical twilight begins at: {nautical_twilight_begin}")
+    print(f"Nautical twilight ends at: {nautical_twilight_end}")
+    print(f"Astronomical twilight begins at: {astronomical_twilight_begin}")
+    print(f"Astronomical twilight ends at: {astronomical_twilight_end}")
+
+else:
+    pass
+
+
