@@ -1,0 +1,82 @@
+import random
+from tkinter import *
+BACKGROUND_COLOR = "#239B56"
+
+PLANETS_SYMBOLS = ["☉","☽","☿","♀","↑"]
+ZODIAC_SYMBOLS = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces", "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces", "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"]
+
+window = Tk()
+window.title("Zodiac Chart")
+window.config(height=700, width=1400, bg=BACKGROUND_COLOR, padx=50, pady=50)
+
+
+canvas = Canvas(height=700, width=1400, highlightthickness=0)
+canvas.config(bg = "snow2")
+canvas.grid(column=0, row=0)
+
+
+
+
+def play():
+
+    canvas.delete("all")
+    rowA = canvas.create_text(350, 50, text="A", font=("Arial", 40, "normal"))
+    rowB = canvas.create_text(550, 50, text="B", font=("Arial", 40, "normal"))
+    rowC = canvas.create_text(750, 50, text="C", font=("Arial", 40, "normal"))
+    rowD = canvas.create_text(950, 50, text="D", font=("Arial", 40, "normal"))
+    rowE = canvas.create_text(1150, 50, text="E", font=("Arial", 40, "normal"))
+
+    def getsymbols():
+        for planet in PLANETS_SYMBOLS:
+            multiplier = PLANETS_SYMBOLS.index(planet)
+            rowzodiac = canvas.create_text(50, 120 * (multiplier + 1), text=f"{planet}", font=("Arial", 40, "normal"))
+
+    def getchart(column):
+        randomsun = random.choice(ZODIAC_SYMBOLS)
+        randomplanet = random.choice(ZODIAC_SYMBOLS)
+        someindex = ZODIAC_SYMBOLS.index(randomsun) + 12
+        mercuryrange = range((someindex - 1), (someindex + 1))
+        randommercuryindex = random.choice(mercuryrange)
+        randommercury = ZODIAC_SYMBOLS[randommercuryindex]
+        sun = canvas.create_text((150+200*column), 120, text=f"{randomsun}", font=("Arial", 20, "normal"))
+        chart = canvas.create_text((150+200*column), 240, text=f"{random.choice(ZODIAC_SYMBOLS)}", font=("Arial", 20, "normal"))
+        mercury = canvas.create_text((150+200*column), 360, text=f"{randommercury}", font=("Arial", 20, "normal"))
+        venus = canvas.create_text((150+200*column), 480, text=f"{random.choice(ZODIAC_SYMBOLS)}", font=("Arial", 20, "normal"))
+        mars = canvas.create_text((150+200*column), 600, text=f"{random.choice(ZODIAC_SYMBOLS)}", font=("Arial", 20, "normal"))
+
+    getsymbols()
+    for r in range (1,6):
+        getchart(r)
+
+
+
+play_button = Button(text="Again", command=play)
+play_button.grid(column=1, row=1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+window.mainloop()
+
+
