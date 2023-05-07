@@ -1,0 +1,46 @@
+from bs4 import BeautifulSoup
+import requests
+import spotipy
+from spotipy.oauth2 import SpotifyOAuth
+
+print("In case you dont know how to obtain ID and Secret, here's a link:")
+print("https://spotipy.readthedocs.io/en/2.13.0/#spotipy.oauth2.SpotifyOAuth")
+print("")
+CLIENT_ID = input("What's your spotify client ID?")
+CLIENT_SECRET = input("What's your spotify client secret?")
+
+which_date = input("Which day do you want to get the HOT100 from? DD-MM-YYYY")
+year = which_date.split("-")[2]
+
+response = requests.get("https://www.billboard.com/charts/hot-100/" + which_date)
+
+soup = BeautifulSoup(response.text, 'html.parser')
+
+top_songs = soup.find_all(name = "h3", id = "title-of-a-story")
+song_names = [song.getText().strip("\n") for song in top_songs[3:103]]
+
+
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID,
+                                               client_secret=CLIENT_SECRET,
+                                               redirect_uri="http://example.com",
+                                               scope="playlist-modify-private",
+                                               cache_path="token.txt"))
+current_user = sp.current_user()["id"]
+l_uri = []
+with open('Top 100 songs.txt','r') as fs:
+    while True:
+        str_song = fs.readline()
+        if not str_song:
+            break
+        q = f'track:{str_song[:-1]} year:{year}'
+        result = sp.search(q, type='track', limit=1)
+        if result and len(result["tracks"]["items"]) == 1:
+            l_uri.append(result['tracks']['items'][0]['uri'])
+
+print(l_uri)
+
+playlist = sp.user_playlist_create(user=CLIENT_ID, name=f"{which_date} Billboard 100", public=False)
+# print(playlist)
+
+sp.playlist_add_items(playlist_id=playlist["id"], items=l_uri)
+
